@@ -378,6 +378,963 @@ h1, h2, h3, h4, b, .section-title {
 
 .quiz-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-top: 16px; }
 .charts-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); }
+@media(min-width: 550px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+
+.jfAgent-window-wrapper, 
+div[class*="jfAgent-window-wrapper"],
+#jfAgent-container,
+.jotform-agent-embed {
+    bottom: auto !important;
+    top: 24px !important;    /* Jarak dari tepi atas layar */
+    right: 24px !important;  /* Jarak dari tepi kanan layar */
+    z-index: 999999 !important;
+}
+
+/* 2. Mengecilkan ukuran tombol bulat bawaan chatbot Jotform */
+.jfAgent-badge, 
+div[class*="jfAgent-badge"],
+button[class*="jfAgent-badge-button"] {
+    width: 48px !important;  /* Bawaan aslinya 60px */
+    height: 48px !important; 
+    transform: scale(0.85) !important; /* Efek skala agar mengecil merata */
+}
+
+/* 3. Menyesuaikan posisi kotak obrolan saat tombolnya diklik */
+.jfAgent-chat-container,
+div[class*="jfAgent-chat-window"] {
+    bottom: auto !important;
+    top: 80px !important;    /* Muncul tepat di bawah tombol kanan atas */
+    right: 24px !important;
+    max-height: 70vh !important; /* Batas tinggi agar tidak amblas ke bawah layar */
+}
+</style>
+</head>
+<body>
+
+<div class="glow-container">
+  <div class="blob blob-top-right"></div>
+  <div class="blob blob-bottom-left"></div>
+  <div class="blob blob-center-left"></div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></symbol>
+  <symbol id="icon-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="10" x="3" y="11" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" x2="8" y1="16" y2="16"/><line x1="16" x2="16" y1="16" y2="16"/></symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></symbol>
+  <symbol id="icon-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></symbol>
+  <symbol id="icon-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="icon-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
+</svg>
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="badge-top"><svg><use href="#icon-zap"/></svg> Smart App for A Smarter Generation</div>
+    <h1>EcoQuest</h1>
+    <p>Interactive app to learn about water conservation</p>
+  </div>
+  
+  <div class="card card-clickable" onclick="showPage('project')" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.4) 100%); border-color: rgba(56, 189, 248, 0.4);">
+    <h2 style="color: #38BDF8;">Eksperimen Diorama</h2>
+    <p>Simulasi seru untuk melihat langsung cara kerja siklus air, sistem penyaringan alami, dan cara menjaga bumi kita tetap hijau.</p>
+  </div>
+  
+  <div class="card card-clickable" onclick="showPage('learn')">
+    <b>📚 Ruang Belajar</b><br>
+    <span class="small">"Membaca bait materi tentang air yang kian menyusut, dilanjutkan kuis seru agar pikiran tak kusut. Di sini semua jawaban bisa diperbaiki, tak seperti rasamu padaku yang sudah telanjur hanyut.."</span>
+  </div>
+  <div class="card card-clickable" onclick="showPage('ai')">
+    <b>🤖 EcoBot Assistant</b><br>
+    <span class="small">"AI yang selalu siap kasih jawaban dan kepastian. Bukan seperti dirinya, yang cuma bisa kasih harapan lalu pergi meninggalkan..."</span>
+  </div>
+</section>
+
+<section id="project" class="page">
+  <div class="section-header">
+    <svg><use href="#icon-camera"/></svg>
+    <h2 class="section-title">Project Journey</h2>
+  </div>
+  
+  <div class="timeline-item"><b>Planning (Rencana)</b>Kumpul kelompok untuk menentukan diorama apa yang mau dibuat, mendata alat dan bahan yang bisa dipakai, dan pembagian tugas.</div>
+  <div class="timeline-item"><b>Designing (Desain)</b>Membuat dan memodifikasi sedikit struktur diorama yang sudah disepakati agar air mengalir lancar ke wadah penampung.</div>
+  <div class="timeline-item"><b>Building (Merakit)</b>Mulai membuat miniatur rumah, memasang selang/pipa kecil, dan memasang saringan air.</div>
+  <div class="timeline-item"><b>Testing (Uji Coba)</b>Mengalirkan air untuk mengecek apakah diorama sudah mencerminkan fungsinya.</div>
+  <div class="timeline-item"><b>Final Result (Selesai)</b>Menambah hiasan di sekitar maket, mendokumentasikan, dan menghubungkannya ke aplikasi.</div>
+
+  <b style="font-family: 'Plus Jakarta Sans', sans-serif; display: block; margin: 32px 0 16px 4px; font-size: 1.1rem; color: var(--text);">📸 Dokumentasi Proyek</b>
+  
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="background: var(--card); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 20px; padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="width: 100%; height: 240px; border-radius: 12px; overflow: hidden;">
+        <img src="proses.jpeg" style="width: 100%; height: 100%; object-fit: cover; object-position: center 30%;" alt="Proses Pembuatan">
+      </div>
+      <div style="padding: 0 6px 4px;">
+        <span style="font-size: 0.8rem; color: #38BDF8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Proses Perakitan</span>
+        <p class="small" style="margin-top: 2px;">Dokumentasi saat tim bekerja sama memotong komponen dasar dan merakit struktur utama diorama.</p>
+      </div>
+    </div>
+
+    <div style="background: var(--card); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 20px; padding: 12px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="width: 100%; height: 320px; border-radius: 12px; overflow: hidden;">
+        <img src="hasil.jpeg" style="width: 100%; height: 100%; object-fit: cover; object-position: center;" alt="Hasil Diorama">
+      </div>
+      <div style="padding: 0 6px 4px;">
+        <span style="font-size: 0.8rem; color: #34D399; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Diorama Selesai</span>
+        <p class="small" style="margin-top: 2px;">Tampilan akhir sistem Water Harvesting lengkap dengan simulasi awan dan penampungan air bersih.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="learn" class="page">
+  <div class="section-header">
+    <svg><use href="#icon-book"/></svg>
+    <h2 class="section-title">Ruang Belajar</h2>
+  </div>
+  
+  <div class="progress">
+    <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.95rem;">
+      <span>Progres Belajarmu</span>
+      <span style="color:var(--text); font-weight:700;"><span id="xp">0</span> XP</span>
+    </div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <span id="prog" class="small">0 / 7 materi diselesaikan</span>
+  </div>
+
+  <div class="card" style="margin-top:0; padding:24px;">
+    <b style="font-size:1rem; display:block; margin-bottom:4px;">🏅 Koleksi Lencana</b>
+    <span class="small">Lencana keren yang otomatis terbuka setiap kali kamu berhasil menyelesaikan kuis.</span>
+    <div id="badgesContainer" class="badge-grid"></div>
+  </div>
+
+  <div class="card">
+    <b style="font-size:1rem; display:block; margin-bottom:4px;">📊 Statistik Nilai</b>
+    <span class="small">Lihat perbandingan jawaban kuis yang benar dan seberapa banyak materi yang sudah kamu baca.</span>
+    
+    <div id="chartPlaceholder" style="margin-top: 16px; padding: 20px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 12px; text-align: center; color: var(--muted); font-size: 0.9rem;">
+      🔒 Kerjakan kuis pada materi di bawah untuk menampilkan statistik pembelajaranmu.
+    </div>
+
+    <div class="charts-grid" id="chartsActualGrid" style="display: none;">
+      <div style="height:140px; position:relative;"><canvas id="quizChart"></canvas></div>
+      <div style="height:140px; position:relative;"><canvas id="completionChart"></canvas></div>
+    </div>
+  </div>
+
+  <div id="lessons" style="margin-top:24px;"></div>
+</section>
+
+<section id="ai" class="page">
+  <div class="section-header">
+    <svg><use href="#icon-bot"/></svg>
+    <h2 class="section-title">EcoBot Assistant</h2>
+  </div>
+  <div class="card" style="margin-bottom:24px;">
+    <p class="small">"Ada yang membingungkan seputar air atau perubahan iklim? Klik aja tombol Chatbot AI di kanan bawah layar. Dekat kok, gak kayak dia yang terasa jauh banget kalau mau dichat..."</p>
+  </div>
+  <div style="border-radius:20px; overflow:hidden; border:1px solid var(--border);">
+    <script src='https://cdn.jotfor.ms/agent/embedjs/019e903c5b597628b46a371b6a73d18de9fb/embed.js'></script>
+  </div>
+</section>
+
+<section id="team" class="page">
+  <div class="section-header">
+    <svg><use href="#icon-users"/></svg>
+    <h2 class="section-title">Anggota Tim</h2>
+  </div>
+  <p class="small" style="margin: -16px 0 24px 4px; font-style: italic; color: #E2E8F0; line-height: 1.6;">
+    "Kenalan sama tim kita yuk. Karena tak kenal maka tak sayang, meski terkadang... sudah saling kenal tapi tetap tak saling sayang."
+  </p>
+  <div class="card"><b>Moses - Ketua Kelompok</b><br><span class="small">"Mengatur jadwal kerja kelompok dan memastikan struktur bangunan diorama berdiri kokoh"</span></div>
+  <div class="card"><b>Christophorus</b><br><span class="small">"Bekerja keras memperbaiki eror sistem agar aplikasi ini berjalan, tidak seperti hubungan yang macet karena cuma jadi teman"</span></div>
+  <div class="card"><b>Gerald</b><br><span class="small">"Konseptor fisik pemanen hujan. Mengubah rintik yang semula tak berarah, menjadi harmoni sistem pengairan maket yang fungsional dan bermakna (terjemahan: Merancang dan mengerjakan diorama Water Harvesting)"</span></div>
+  <div class="card"><b>Grace</b><br><span class="small">"Bertanggung jawab menyelaraskan ruang dan fungsi Water Harvesting. Menyeduh ide-ide teknis menjadi sebuah struktur nyata, memastikan air mengalir tenang layaknya obrolan di kala senja. (terjemahan: Merancang dan mengerjakan diorama Water Harvesting)"</span></div>
+  <div class="card"><b>Michael</b><br><span class="small">"Memastikan air tidak sekadar lewat dan hilang, tetapi meresap dan memberi arti bagi setiap sudut struktur fisik yang ia bangun dengan penuh kontemplasi. (terjemahan: Merancang dan mengerjakan diorama Water Harvesting)"</span></div>
+  <div class="card"><b>Paula</b><br><span class="small">"Mengubah gemercik hujan menjadi sebuah simfoni. Merajut pipa dan ruang pada bangunan agar Water Harvesting ini tidak hanya berfungsi, tapi juga berbicara tentang kehidupan. (terjemahan: Merancang dan mengerjakan diorama Water Harvesting)"</span></div>
+</section>
+
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContentDiv">
+    <button class="close" onclick="closeLesson()"><svg><use href="#icon-x"/></svg></button>
+    <div id="lessonContent"></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button id="nav-home" onclick="showPage('home')" class="active"><svg><use href="#icon-home"/></svg>Home</button>
+  <button id="nav-project" onclick="showPage('project')"><svg><use href="#icon-camera"/></svg>Project</button>
+  <button id="nav-learn" onclick="showPage('learn')"><svg><use href="#icon-book"/></svg>Belajar</button>
+  <button id="nav-ai" onclick="showPage('ai')"><svg><use href="#icon-bot"/></svg>Tanya AI</button>
+  <button id="nav-team" onclick="showPage('team')"><svg><use href="#icon-users"/></svg>Tim</button>
+</nav>
+
+<script>
+const lessons=[
+{
+  t:"Water & Life",
+  img:"https://img.freepik.com/free-vector/blue-black-liquid-background_1409-10002.jpg?semt=ais_hybrid&w=740&q=80",
+  stats: [
+    { val: "60%", desc: "Dari berat tubuh kita adalah air", color: "#38bdf8" },
+    { val: "Hak Dasar", desc: "Status air bersih menurut WHO", color: "#34d399" }
+  ],
+  m:`Air adalah kebutuhan paling utama bagi semua makhluk hidup di bumi dan posisinya tidak bisa digantikan oleh apa pun. Di dalam tubuh kita, air bekerja untuk <b style="color:#38bdf8;">menjaga suhu badan tetap stabil</b>, mengalirkan sari-sari makanan dan oksigen ke seluruh organ, serta membantu proses pencernaan. Jika tubuh kita kekurangan air sedikit saja, kita akan langsung merasa lemas, sulit fokus, dan cepat lelah.<br><br>Selain penting untuk kesehatan tubuh, air bersih juga menjadi <b style="color:#34d399;">penggerak utama kehidupan</b> manusia sehari-hari. Mulai dari urusan pertanian untuk menghasilkan makanan, pabrik industri, memasak, mandi, hingga pembangkit listrik semuanya butuh air bersih. Tanpa pengelolaan air yang bijak, persediaan makanan kita bisa terancam dan penyakit akibat air kotor akan sangat mudah menyebar.`,
+  g:"Lembaga kesehatan dunia (WHO) menyatakan bahwa akses ke air bersih adalah hak dasar setiap manusia.",
+  f:"Sekitar 60% dari berat tubuh kita sebenarnya adalah air.",
+  quizzes:[
+    {q:"Berapa persen tubuh manusia terdiri dari air?", a:["20%","40%","60%","80%"], c:2},
+    {q:"Badan dunia mana yang sangat peduli dengan ketersediaan air bersih?", a:["UNESCO","WHO","UNICEF","WTO"], c:1},
+    {q:"Apa yang bukan merupakan fungsi utama air bagi kesehatan tubuh kita?", a:["Menjaga suhu tubuh","Mengalirkan sari makanan","Membantu pencernaan","Menghasilkan oksigen utama di paru-paru"], c:3}
+  ]
+},
+{
+  t:"Water Cycle",
+  img:"https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=800&q=80",
+  stats: [
+    { val: "Tidak Putus", desc: "Siklus perputaran air di bumi", color: "#38bdf8" },
+    { val: "Air Laut", desc: "Penyumbang utama uap awan hujan", color: "#34d399" }
+  ],
+  m:`Siklus air, atau yang biasa kita sebut perputaran air, adalah <b style="color:#38bdf8;">perjalanan air yang terus-menerus</b> dari permukaan bumi menuju atmosfer lalu kembali lagi ke bumi. Proses alami ini tidak pernah berhenti dan dimulai ketika air laut, danau, atau sungai menguap ke atas karena terkena panas matahari. Tumbuhan di sekitar kita juga ikut menyumbang uap air lewat daunnya.<br><br>Uap air yang naik ke langit ini lama-kelamaan akan mendingin dan berkumpul membentuk awan tebal. Ketika awan sudah sangat berat dan tidak sanggup lagi menampung uap tersebut, jatuhlah air ke bumi dalam bentuk <b style="color:#34d399;">hujan atau salju</b>. Air hujan ini ada yang mengalir di atas tanah masuk kembali ke sungai, dan ada juga yang meresap ke dalam tanah menjadi cadangan air bersih di bawah tanah.`,
+  g:"Penelitian geologi menunjukkan bahwa air di bumi terus berputar dalam lingkaran yang tidak pernah putus.",
+  f:"Sebagian besar uap air yang membentuk awan hujan ternyata berasal dari penguapan air laut.",
+  quizzes:[
+    {q:"Proses berkumpulnya uap air di langit menjadi awan akibat udara dingin disebut?", a:["Penguapan","Kondensasi (Pengembunan)","Hujan","Penyaringan"], c:1},
+    {q:"Air hujan yang mengalir di permukaan tanah menuju sungai dinamakan?", a:["Resapan","Aliran permukaan (Run-off)","Penguapan","Penyaringan"], c:1},
+    {q:"Penguapan air yang keluar langsung dari pori-pori daun tumbuhan disebut?", a:["Evaporasi","Kondensasi","Transpirasi","Presipitasi"], c:2}
+  ]
+},
+{
+  t:"Rainwater Collection",
+  img:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80",
+  stats: [
+    { val: "Ribuan L", desc: "Potensi panen air atap rumah", color: "#38bdf8" },
+    { val: "Dibuang", desc: "Air di menit pertama hujan", color: "#f87171" }
+  ],
+  m:`Untuk membuat alat penampung air hujan yang bagus di rumah, kita butuh beberapa bagian komponen yang saling terhubung. Bagian paling atas adalah area penangkap air, yaitu atap rumah kita. Jenis bahan atap sangat memengaruhi kebersihan air; atap dari genteng beton atau seng yang bersih jauh lebih bagus daripada atap rumah yang sudah berkarat atau penuh kotoran burung.<br><br>Dari atap, air hujan akan mengalir masuk ke talang lalu turun lewat pipa penyalur. Sebelum air masuk ke tangki penampungan utama, cara cerdas adalah membuat sistem untuk <b style="color:#38bdf8;">menangkap, mengalirkan, dan menampung</b> air dengan menyediakan <b style="color:#f87171;">alat penyaring awal</b> yang bertugas membuang air hujan yang turun di menit-menit pertama. Air di menit pertama ini sengaja dibuang karena biasanya masih membawa debu, daun kering, dan kotoran dari atap, sehingga air yang masuk ke tangki utama tetap bersih.`,
+  g:"Kunci utama air tampungan yang jernih dimulai dari kebersihan atap dan talang rumah.",
+  f:"Atap rumah yang luas bisa mengumpulkan ribuan liter air hanya dalam sekali hujan lebat.",
+  quizzes:[
+    {q:"Bagian utama yang berfungsi menangkap air hujan di rumah adalah?", a:["Tangki bawah tanah","Pipa paralon","Atap bangunan","Keran air"], c:2},
+    {q:"Mengapa air hujan di menit-menit pertama sebaiknya dibuang?", a:["Because airnya terlalu dingin","Untuk membuang debu dan kotoran awal yang menempel di atap","Biar tangki tidak cepat penuh","Karena airnya tidak mengandung garam"], c:1},
+    {q:"Bahan atap seperti apa yang kurang baik untuk mengumpulkan air hujan?", a:["Genteng beton bersih","Atap yang sudah berkarat dan kotor","Seng baru","Kaca tebal"], c:1}
+  ]
+},
+{
+  t:"Water Filtration",
+  img:"https://img.freepik.com/free-vector/isometric-water-purification-technology-horizontal-composition-with-infographic-elements-bar-charts-aqua-aeration-units-text-vector-illustration_1284-81078.jpg?semt=ais_hybrid&w=740&q=80",
+  stats: [
+    { val: "Kerikil", desc: "Menahan kotoran dan daun", color: "#38bdf8" },
+    { val: "Arang", desc: "Menyerap zat kimia & bau", color: "#34d399" }
+  ],
+  m:`Filtrasi atau penyaringan air adalah cara memisahkan kotoran, lumpur, dan bau dari dalam air menggunakan bahan-bahan alami di sekitar kita. Dalam proyek membuat filter air sederhana, kita menyusun beberapa lapis bahan di dalam wadah secara berurutan dari atas ke bawah. Setiap lapisan bahan punya tugas masing-masing.<br><br>Lapisan kerikil dan pasir berfungsi untuk <b style="color:#38bdf8;">menahan kotoran yang berukuran besar</b> seperti lumpur, sisa daun, dan pasir halus. Setelah itu, ada lapisan <b style="color:#34d399;">arang aktif (arang kayu biasa)</b> yang sangat penting karena bisa menyerap zat kimia berbahaya, menghilangkan bau tidak sedap, dan membuat air tidak terasa aneh. Di bagian paling bawah, kita pasang ijuk, kapas, atau tisu untuk menahan sisa-sisa pasir halus agar air yang keluar dari keran benar-benar jernih.`,
+  g:"Ingat, air yang terlihat jernih setelah disaring belum tentu aman untuk langsung diminum sebelum dimasak.",
+  f:"Pori-pori super kecil pada arang aktif mampu mengikat kotoran dan racun di dalam air.",
+  quizzes:[
+    {q:"Bahan alami yang bertugas menyaring lumpur dan pasir dalam filter sederhana adalah?", a:["Pasir dan kerikil","Plastik bekas","Arang saja","Tisu basah"], c:0},
+    {q:"Apa kegunaan utama dari memasukkan arang aktif ke dalam botol saringan?", a:["Membuat air jadi berwarna hitam","Menghilangkan bau, racun, dan rasa tidak enak pada air","Menambah jumlah air","Membuat filter jadi berat"], c:1},
+    {q:"Mengapa kita harus meletakkan kapas atau tisu di lapisan paling bawah saringan?", a:["Biar airnya wangi","Untuk menahan butiran pasir halus agar tidak ikut keluar","Membunuh kuman penyakit","Mengubah air jadi air mineral"], c:1}
+  ]
+},
+{
+  t:"Climate & Water Crisis",
+  img:"https://images.unsplash.com/photo-1447014421976-7fec21d26d86?w=800&q=80",
+  stats: [
+    { val: "40%", desc: "Krisis air bersih di tahun 2030", color: "#38bdf8" },
+    { val: "Ekstrem", desc: "Dari kemarau jadi banjir bandang", color: "#34d399" }
+  ],
+  m:`Pernahkah kamu menyadari bahwa cuaca belakangan ini semakin sulit ditebak? Kadang hujan turun sangat lebat hingga banjir, tapi di waktu lain kemarau datang begitu panjang. Ini bukanlah kebetulan. Pemanasan global tidak hanya membuat suhu udara menjadi lebih panas, tetapi juga secara langsung merusak dan <b style="color:#38bdf8;">"mempercepat" siklus air alami</b> bumi kita. Suhu yang lebih panas membuat laju penguapan air di permukaan bumi terjadi jauh lebih cepat dari biasanya.<br><br>Menurut laporan dari Organisasi Meteorologi Dunia (WMO), percepatan siklus air ini menciptakan fenomena cuaca ekstrem yang terpolarisasi. Sederhananya: wilayah yang tadinya kering akan kehilangan airnya ke udara dan mengalami kekeringan ekstrem (kemarau panjang), sedangkan wilayah yang biasanya basah akan diguyur curah hujan yang jauh lebih masif dari biasanya karena awan terlalu penuh menampung uap air. WMO menyebut kondisi ini sebagai siklus yang tidak menentu: <b style="color:#34d399;">dari kekeringan bergeser drastis menjadi banjir bandang</b>.<br><br>Bukan cuma cuaca ekstrem, perubahan iklim juga mengancam tabungan air bersih kita. Suhu yang panas membuat gletser (es di pegunungan yang merupakan cadangan air tawar raksasa) mencair dan terbuang ke laut lepas. Akibatnya, permukaan air laut naik dan perlahan menyusup masuk ke daratan, mencemari sumur-sumur air tawar dan air tanah kita menjadi asin. Fenomena ini disebut <b style="color:#f87171;">intrusi air laut</b>. Jika siklus alami ini terus rusak, krisis air bersih akan menjadi kenyataan pahit bagi generasi kita.`,
+  g:"PBB (UN-Water) menyatakan bahwa air adalah medium utama di mana manusia akan merasakan dampak terburuk dari perubahan iklim.",
+  f:"Suhu yang panas tidak membuat air di bumi hilang, ia hanya berpindah tempat dengan cara yang ekstrem dan merusak ketersediaan air bersih.",
+  quizzes:[
+    {q:"Apa dampak langsung pemanasan global terhadap siklus air di bumi?", a:["Memperlambat penguapan","Membuat siklus air semakin cepat dan ekstrem","Menghentikan siklus air","Membuat air hujan menjadi beku"], c:1},
+    {q:"Mengapa perubahan iklim dapat menyebabkan banjir bandang sekaligus kekeringan panjang?", a:["Karena wilayah kering dipindah ke pegunungan","Karena laju penguapan yang tinggi mengacaukan letak turunnya hujan","Karena awan berhenti bergerak","Karena atmosfer bumi bocor"], c:1},
+    {q:"Bagaimana naiknya permukaan air laut bisa merusak ketersediaan air bersih di daratan?", a:["Air laut yang naik menyusup dan mencemari sumur air tawar menjadi asin","Air laut mengubah arah angin","Air laut membuat ikan air tawar bertambah","Air laut membekukan daratan"], c:0}
+  ]
+},
+{
+  t:"Water Conservation",
+  img:"https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?w=800&q=80",
+  stats: [
+    { val: "< 1%", desc: "Sisa air tawar untuk manusia", color: "#f87171" },
+    { val: "Puluhan L", desc: "Air terbuang akibat keran bocor", color: "#38bdf8" }
+  ],
+  m:`Konservasi air artinya adalah tindakan bijaksana dan hemat dalam menggunakan serta menjaga persediaan air bersih di sekitar kita. Langkah ini sangat mendesak untuk dilakukan sekarang. Mengapa? Karena meskipun bumi kita terlihat penuh dengan air, nyatanya sebagian besar adalah air laut yang asin. Air tawar yang bisa kita pakai untuk hidup jumlahnya <b style="color:#f87171;">kurang dari 1%</b> di seluruh dunia.<br><br>Kita bisa mulai menghemat air dari hal-hal kecil di rumah sekolah, misalnya <b style="color:#38bdf8;">mematikan keran air saat menggosok gigi</b>, langsung melaporkan atau memperbaiki jika ada pipa yang bocor, dan menggunakan kembali air bekas cucian beras atau sayur untuk menyiram tanaman di halaman rumah. Langkah kecil ini jika dilakukan bersama-sama akan menyelamatkan bumi kita.`,
+  g:"Menghemat air sejak dini sama dengan mengamankan persediaan air bersih untuk masa depan kita.",
+  f:"Keran air yang bocor dan dibiarkan menetes bisa membuang puluhan liter air bersih dalam sehari.",
+  quizzes:[
+    {q:"Apa contoh menghemat air yang paling mudah dilakukan di sekolah?", a:["Membiarkan keran toilet terus mengalir","Mematikan keran air setelah selesai digunakan","Mencuci sepatu setiap hari di sekolah","Bermain perang air dengan teman"], c:1},
+    {q:"Berapa perkiraan jumlah air tawar yang bisa diakses dan aman digunakan manusia di bumi?", a:["Semua air di bumi","Lebih dari 50%","Kurang dari 1%","Sekitar 90%"], c:2},
+    {q:"Memakai kembali air bekas cucian beras untuk menyiram tanaman adalah contoh tindakan?", a:["Mengurangi sampah (Reduce)","Menggunakan kembali (Reuse)","Mendaur ulang (Recycle)","Menguapkan air"], c:1}
+  ]
+},
+{
+  t:"Clean Water Future",
+  img:"https://img.freepik.com/free-vector/blue-black-liquid-background_1409-10002.jpg?semt=ais_hybrid&w=740&q=80",
+  stats: [
+    { val: "500 ml", desc: "Air menguap per 50 chat AI", color: "#f87171" },
+    { val: "Smart Grid", desc: "Sensor deteksi bocor otomatis", color: "#34d399" }
+  ],
+  m:`Sebagai generasi digital, kita mungkin merasa aktivitas kita di layar gadget tidak banyak membuang air, namun fakta di balik infrastruktur teknologi justru berkata sebaliknya. Riset dari University of California, Riverside mengungkapkan bahwa setiap kali kamu melakukan percakapan singkat berisi 20 hingga 50 pertanyaan dengan AI generatif, sistem diam-diam menghabiskan sekitar 500 ml air bersih murni. Air tersebut menguap melalui sistem pendingin (evaporative cooling) demi menjaga agar mesin data center raksasa tidak mengalami overheating. Artinya, teknologi pintar yang kita gunakan hari ini meninggalkan <b style="color:#f87171;">jejak air (water footprint)</b> yang sangat besar.<br><br>Apakah ini artinya kita harus mendiskreditkan teknologi? Tentu tidak, solusinya adalah menciptakan <b style="color:#34d399;">inovasi yang bertanggung jawab (Responsible Tech)</b> seperti yang sudah mulai diterapkan di berbagai negara. Singapura dan Korea Selatan kini memimpin lewat Smart Water Grid, yaitu jaringan sensor berbasis IoT di sepanjang pipa bawah tanah yang mampu mendeteksi kebocoran sekecil apa pun secara otomatis melalui frekuensi suara sebelum air terbuang sia-sia. Sementara di wilayah kering seperti Arab Saudi, teknologi Desalinisasi Membran digunakan untuk menyaring air laut menjadi air minum melalui tenaga panel surya.`,
+  g:"Langkah kecilmu dalam menghemat air hari ini sangat berarti untuk masa depan bumi.",
+  f:"Teknologi saringan air sederhana terbukti membantu banyak warga di desa terpencil mendapatkan air bersih.",
+  quizzes:[
+    {q:"Berdasarkan laporan global dari UNESCO, berapa besar prediksi kelangkaan air bersih dunia pada tahun 2030?", a:["15%","25%","40%","60%"], c:2},
+    {q:"Setiap melakukan 20-50 pertanyaan dengan AI generatif, sistem mendinginkan mesin dengan menghabiskan air bersih murni sekitar...", a:["100 ml","300 ml","500 ml","1 Liter"], c:2},
+    {q:"Negara mana yang memimpin penggunaan teknologi Smart Water Grid berbasis IoT untuk mendeteksi kebocoran pipa bawah tanah?", a:["Singapura dan Korea Selatan","Arab Saudi dan Mesir","Amerika Serikat dan Jepang","Inggris dan Jerman"], c:0}
+  ]
+}
+];
+
+let xp=parseInt(localStorage.getItem("ecoquest_xp"))||0;
+let done=JSON.parse(localStorage.getItem("ecoquest_done")||"[]");
+let quizCorrect=parseInt(localStorage.getItem("ecoquest_correct"))||0;
+let quizWrong=parseInt(localStorage.getItem("ecoquest_wrong"))||0;
+
+let currentLessonIdx=null;
+let currentQuizIdx=0;
+let lessonCorrectAnswers=0;
+
+let quizChartInstance=null;
+let completionChartInstance=null;
+
+function showPage(p){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+ const activePage=document.getElementById(p);
+ if(activePage){
+   activePage.classList.add('active');
+   document.getElementById('nav-'+p).classList.add('active');
+ }
+ if(p==='learn') {
+   renderLessons();
+   updateProgressUI();
+ }
+ window.scrollTo(0,0);
+}
+
+function updateProgressUI(){
+  document.getElementById("xp").innerText = xp;
+  document.getElementById("prog").innerText = `${done.length} / 7 materi diselesaikan`;
+  const pct = Math.min(100, Math.round((done.length / 7) * 100));
+  document.getElementById("fill").style.width = pct + "%";
+  renderBadges();
+  
+  // Tampilkan visual grafik jika user sudah pernah mengklik kuis
+  if (quizCorrect > 0 || quizWrong > 0 || done.length > 0) {
+    document.getElementById("chartPlaceholder").style.display = "none";
+    document.getElementById("chartsActualGrid").style.display = "grid";
+    setTimeout(initCharts, 50);
+  }
+  saveUserData();
+}
+
+function renderBadges(){
+ const container=document.getElementById("badgesContainer");
+ container.innerHTML="";
+ 
+ const badgeNames = [
+   "Hydro Guardian",
+   "Cycle Master",
+   "Rain Harvester",
+   "Filter Expert",
+   "Climate Warrior",
+   "Eco Saver",
+   "Pure Future"
+ ];
+
+ lessons.forEach((l,i)=>{
+   const isUnlocked=done.includes(i);
+   const div=document.createElement("div");
+   div.className=`badge-item ${isUnlocked?'badge-unlocked':'badge-locked'}`;
+   div.innerHTML=`<svg><use href="#icon-award"/></svg><span>${badgeNames[i]}</span>`;
+   container.appendChild(div);
+ });
+}
+
+function renderLessons(){
+ const container=document.getElementById("lessons");
+ container.innerHTML="";
+ lessons.forEach((l,i)=>{
+   const div=document.createElement("div");
+   div.className="lesson";
+   const isCompleted=done.includes(i);
+   div.innerHTML=`
+     <div class="lesson-info">
+       <div class="lesson-icon"><svg><use href="#icon-book"/></svg></div>
+       <div>
+         <b style="font-size:1.05rem;">${l.t}</b><br>
+         <span class="small" style="color:${isCompleted?'var(--success)':'#A1A1AA'}; font-weight:${isCompleted?'600':'500'}">
+           ${isCompleted?'Selesai (+15 XP)':'Belum dibaca'}
+         </span>
+       </div>
+     </div>
+     <svg style="width:16px; height:16px; stroke:var(--text); stroke-width:2.5;"><use href="#icon-chevron-right"/></svg>
+   `;
+   div.onclick=()=>openLesson(i);
+   container.appendChild(div);
+   setTimeout(()=>div.classList.add('revealed'), i*60);
+ });
+}
+
+function openLesson(i){
+ currentLessonIdx=i;
+ currentQuizIdx=0;
+ lessonCorrectAnswers=0;
+ const l=lessons[i];
+ 
+ const modalDiv = document.getElementById("modalContentDiv");
+ modalDiv.style.animation = 'none';
+ modalDiv.offsetHeight; 
+ modalDiv.style.animation = null;
+
+ let mediaHtml = '';
+ if(l.img) {
+   mediaHtml += `<img src="${l.img}" style="width:100%; height:160px; object-fit:cover; border-radius:16px; margin-bottom:20px; opacity:0.9; box-shadow: 0 10px 25px -10px rgba(0,0,0,0.5);">`;
+ }
+ if(l.stats && l.stats.length > 0) {
+   mediaHtml += `<div style="display:flex; gap:12px; margin-bottom: 24px;">`;
+   l.stats.forEach(s => {
+     mediaHtml += `
+       <div style="background:rgba(255,255,255,0.04); padding:16px 12px; border-radius:14px; flex:1; border:1px solid rgba(255,255,255,0.08); text-align:center;">
+          <b style="font-size:1.4rem; color:${s.color}; display:block; margin-bottom:4px;">${s.val}</b>
+          <span style="font-size:0.75rem; color:#cbd5e1; line-height:1.4; display:block;">${s.desc}</span>
+       </div>
+     `;
+   });
+   mediaHtml += `</div>`;
+ }
+
+ document.getElementById("lessonContent").innerHTML=`
+   ${mediaHtml}
+   <h2 style="font-size:24px; margin-bottom:16px; font-weight:800; letter-spacing:-0.02em;">${l.t}</h2>
+   <p style="line-height:1.65; color:#E2E8F0; font-size:0.98rem; margin-bottom:24px;">${l.m}</p>
+   <div style="background:rgba(56,189,248,0.06); border-left:4px solid #38bdf8; padding:16px 20px; border-radius:4px 12px 12px 4px; margin-bottom:24px;">
+     <b style="color:#38bdf8; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:4px;">💡 Info Penting</b>
+     <span class="small" style="color:#F1F5F9; display:block; line-height:1.5;">${l.g}</span>
+   </div>
+   <div class="quiz-box" id="quizBox">
+     <b style="font-size:1.1rem; display:block; margin-bottom:2px;">🧠 Kuis Pemahaman</b>
+     <span class="small" style="margin-bottom:16px; display:block; color:#E2E8F0;">Jawab 3 pertanyaan berikut dengan benar untuk menyelesaikan modul!</span>
+     <div id="quizQuestion"></div>
+   </div>
+ `;
+ document.getElementById("modal").style.display="flex";
+ document.body.style.overflow="hidden";
+ loadQuizQuestion();
+}
+
+function closeLesson(){
+ document.getElementById("modal").style.display="none";
+ document.body.style.overflow="auto";
+ renderLessons();
+ updateProgressUI();
+}
+
+function loadQuizQuestion(){
+ const l=lessons[currentLessonIdx];
+ const q=l.quizzes[currentQuizIdx];
+ let html=`<p style="font-weight:600; font-size:1rem; margin-bottom:14px; line-height:1.5; color:var(--text);">${currentQuizIdx+1}. ${q.q}</p>`;
+ q.a.forEach((opt,idx)=>{
+   html+=`<button class="option" onclick="submitAnswer(${idx})">${opt}</button>`;
+ });
+ document.getElementById("quizQuestion").innerHTML=html;
+}
+
+function submitAnswer(idx){
+ const l=lessons[currentLessonIdx];
+ const q=l.quizzes[currentQuizIdx];
+ const isCorrect=(idx===q.c);
+ 
+ if(isCorrect){
+   lessonCorrectAnswers++;
+   quizCorrect++;
+ } else {
+   quizWrong++;
+ }
+ saveUserData();
+ 
+ currentQuizIdx++;
+ if(currentQuizIdx < l.quizzes.length){
+   loadQuizQuestion();
+ } else {
+   finishLesson();
+ }
+}
+
+function finishLesson(){
+ const passed=(lessonCorrectAnswers===3);
+ let html="";
+ if(passed){
+   html=`
+     <div style="text-align:center; padding:12px 0;">
+       <div style="width:56px; height:56px; background:rgba(52,211,153,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; border:1px solid var(--success);">
+         <svg style="width:24px; height:24px; stroke:var(--success);"><use href="#icon-check"/></svg>
+       </div>
+       <b style="font-size:1.3rem; color:var(--text); display:block; margin-bottom:6px;">Modul Selesai Sempurna!</b>
+       <p class="small" style="margin-bottom:20px; color:#E2E8F0;">Kamu berhasil menjawab semua kuis dengan benar. Pengalaman belajarmu bertambah!</p>
+       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:12px; border-radius:12px; margin-bottom:24px; font-weight:600; color:#34D399;">+15 XP Berhasil Didapatkan</div>
+       <button class="option" style="text-align:center; background:#135e96; border:none; font-weight:600;" onclick="closeLesson()">Kembali ke Ruang Belajar</button>
+     </div>
+   `;
+   if(!done.includes(currentLessonIdx)){
+     done.push(currentLessonIdx);
+     xp+=15;
+     saveUserData();
+   }
+ } else {
+   html=`
+     <div style="text-align:center; padding:12px 0;">
+       <div style="width:56px; height:56px; background:rgba(248,113,113,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; border:1px solid var(--danger);">
+         <svg style="width:24px; height:24px; stroke:var(--danger);"><use href="#icon-x"/></svg>
+       </div>
+       <b style="font-size:1.3rem; color:var(--text); display:block; margin-bottom:6px;">Belum Berhasil</b>
+       <p class="small" style="margin-bottom:20px; color:#E2E8F0;">Kamu menjawab ${lessonCorrectAnswers} dari 3 soal dengan benar. Untuk menyelesaikan modul ini, kamu harus menjawab semua soal dengan benar.</p>
+       <button class="option" style="text-align:center; background:rgba(255,255,255,0.05); font-weight:600;" onclick="openLesson(${currentLessonIdx})">Coba Ulang Kuis</button>
+     </div>
+   `;
+ }
+ document.getElementById("quizBox").innerHTML=html;
+}
+
+function initCharts(){
+ const qCtx = document.getElementById('quizChart');
+ const cCtx = document.getElementById('completionChart');
+ if(!qCtx || !cCtx) return;
+
+ if(window.quizChartInstance) window.quizChartInstance.destroy();
+ if(window.completionChartInstance) window.completionChartInstance.destroy();
+
+ Chart.defaults.color = '#CBD5E1';
+ Chart.defaults.font.family = 'Inter';
+
+ let quizData = [quizCorrect, quizWrong];
+ let quizColors = ['#34D399', 'rgba(248,113,113,0.35)']; 
+ let quizLabels = ['Benar', 'Salah'];
+
+ if (quizCorrect === 0 && quizWrong === 0) {
+   quizData = [1];
+   quizColors = ['rgba(255, 255, 255, 0.1)']; 
+   quizLabels = ['Belum ada kuis'];
+ }
+
+ window.quizChartInstance = new Chart(qCtx, {
+   type: 'doughnut',
+   data: {
+     labels: quizLabels,
+     datasets: [{
+       data: quizData,
+       backgroundColor: quizColors,
+       borderColor: ['#0b111e'],
+       borderWidth: 2
+     }]
+   },
+   options: {
+     plugins: { legend: { display: false } },
+     cutout: '72%',
+     responsive: true,
+     maintainAspectRatio: false
+   }
+ });
+
+ const completedCount = done.length;
+ const remainingCount = 7 - completedCount;
+
+ window.completionChartInstance = new Chart(cCtx, {
+   type: 'doughnut',
+   data: {
+     labels: ['Selesai', 'Sisa'],
+     datasets: [{
+       data: [completedCount, remainingCount],
+       backgroundColor: ['#38BDF8', 'rgba(255,255,255,0.06)'],
+       borderColor: ['#0b111e'],
+       borderWidth: 2
+     }]
+   },
+   options: {
+     plugins: { legend: { display: false } },
+     cutout: '72%',
+     responsive: true,
+     maintainAspectRatio: false
+   }
+ });
+}
+
+function saveUserData() {
+  localStorage.setItem('ecoquest_xp', xp);
+  localStorage.setItem('ecoquest_correct', quizCorrect);
+  localStorage.setItem('ecoquest_wrong', quizWrong);
+  localStorage.setItem('ecoquest_done', JSON.stringify(done));
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('ecoquest_xp')) {
+    xp = parseInt(localStorage.getItem('ecoquest_xp')) || 0;
+    quizCorrect = parseInt(localStorage.getItem('ecoquest_correct')) || 0;
+    quizWrong = parseInt(localStorage.getItem('ecoquest_wrong')) || 0;
+    done = JSON.parse(localStorage.getItem('ecoquest_done') || '[]');
+    
+    document.getElementById('xp').innerText = xp;
+    document.getElementById('prog').innerText = `${done.length} / 7 materi diselesaikan`;
+    document.getElementById('fill').style.width = `${(done.length / 7) * 100}%`;
+  }
+  
+  renderLessons();
+  
+  if (quizCorrect > 0 || quizWrong > 0 || done.length > 0) {
+    document.getElementById("chartPlaceholder").style.display = "none";
+    document.getElementById("chartsActualGrid").style.display = "grid";
+    initCharts();
+  }
+});
+</script>
+</body>
+</html>
+/* KANVAS GRADASI SOFT AMBIENT */
+.glow-container {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px); 
+  opacity: 0.6; 
+}
+.blob-top-right {
+  top: -15%; right: -10%;
+  width: 650px; height: 650px;
+  background: radial-gradient(circle, #ffffff 0%, #7dd3fc 35%, #135e96 70%, transparent 100%);
+}
+.blob-bottom-left {
+  bottom: -15%; left: -12%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, #ffffff 0%, #bae6fd 30%, #135e96 65%, transparent 100%);
+}
+.blob-center-left {
+  top: 35%; left: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #ffffff 0%, #e0f2fe 40%, #135e96 75%, transparent 100%);
+  opacity: 0.4;
+}
+
+/* LAYOUT & ELEMEN UTAMA */
+.page {
+  display: none;
+  padding: 40px 24px 140px;
+  max-width: 650px;
+  margin: 0 auto;
+  min-height: 100vh;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.page.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero {
+  padding: 60px 0 40px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.04em;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #FFF 40%, #B3DDF2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero p {
+  color: #E2E8F0; 
+  max-width: 480px;
+  margin: 14px auto 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.hero-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+.hero-icon-wrapper svg {
+  width: 36px;
+  height: 36px;
+  stroke: var(--text);
+  stroke-width: 1.75;
+}
+.badge-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.badge-top svg { width: 12px; height: 12px; stroke: #38BDF8; }
+
+/* KARTU KACA GLASSMORPHISM PREMIUM */
+.card {
+  background: var(--card);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  margin-top: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-clickable { cursor: pointer; }
+.card-clickable:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 12px 35px -10px rgba(0,0,0,0.6);
+}
+
+/* KARTU VISUAL KONTRAST */
+.featured {
+  background: linear-gradient(135deg, #135e96 0%, #0ea5e9 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 12px 40px -12px rgba(19, 94, 150, 0.4);
+}
+.featured h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; text-shadow: 0 2px 4px rgba(0,0,0,0.12); }
+.featured p { opacity: 0.95; font-size: 0.95rem; line-height: 1.5; color: #FFFFFF; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.section-header svg { width: 24px; height: 24px; stroke: var(--text); stroke-width: 2; }
+.section-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+
+/* BOTTOM NAVBAR BLUR EFFECT */
+.nav {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 480px;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(11, 17, 30, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 10px;
+  box-shadow: 0 20px 50px -15px rgba(0,0,0,0.55);
+  z-index: 100;
+}
+.nav button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #94A3B8;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+.nav button svg {
+  width: 20px;
+  height: 20px;
+  stroke: #94A3B8;
+  stroke-width: 1.75;
+  transition: all 0.2s ease;
+}
+.nav button.active {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+}
+.nav button.active svg {
+  stroke: #fff;
+}
+
+.lesson {
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.lesson.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.lesson:hover {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.05);
+}
+.lesson-info { display: flex; align-items: center; gap: 16px; }
+.lesson-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lesson-icon svg { width: 18px; height: 18px; stroke: var(--text); }
+
+.timeline-item {
+  position: relative;
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 24px 24px 54px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #E2E8F0;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 30px;
+  width: 8px;
+  height: 8px;
+  background: #38BDF8;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #38BDF8;
+}
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 27px;
+  top: 46px;
+  width: 1px;
+  height: calc(100% - 14px);
+  background: var(--border);
+}
+.timeline-item b { font-size: 1.05rem; color: var(--text); display: block; margin-bottom: 4px; }
+
+.progress {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 999px; margin: 14px 0 6px; overflow: hidden; }
+.fill { height: 100%; width: 0; background: linear-gradient(90deg, #135e96, #38bdf8); border-radius: 999px; transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* MODAL INTERAKTIF DENGAN ANIMASI FADE-IN */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 12, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 200;
+}
+.modal-content {
+  background: #090e1a;
+  width: min(600px, 100%);
+  max-height: 80vh;
+  overflow: auto;
+  border-radius: 24px;
+  padding: 36px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.85);
+  animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(20px);
+  opacity: 0;
+}
+@keyframes modalFadeIn {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.option {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px 20px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.option:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06); }
+.close { float: right; border: none; background: rgba(255,255,255,0.05); color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.close svg { width: 14px; height: 14px; stroke: var(--text); stroke-width: 2.5; }
+.small { color: var(--muted); font-size: .95rem; line-height: 1.6; }
+
+.badge-grid { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  flex: 1;
+  min-width: 110px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.badge-item svg { width: 22px; height: 22px; margin-bottom: 8px; stroke-width: 1.75; }
+.badge-unlocked { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8; }
+.badge-unlocked svg { stroke: #38bdf8; }
+.badge-locked { opacity: 0.4; color: var(--muted); }
+.badge-locked svg { stroke: var(--muted); }
+
+.quiz-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-top: 16px; }
+.charts-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); }
 @media(min-width: 550px) { .charts-grid { grid-template-columns: 120px 1fr; } }
 
   .jfAgent-window-wrapper, 
