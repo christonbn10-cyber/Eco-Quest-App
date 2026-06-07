@@ -379,6 +379,34 @@ h1, h2, h3, h4, b, .section-title {
 .quiz-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-top: 16px; }
 .charts-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); }
 @media(min-width: 550px) { .charts-grid { grid-template-columns: 120px 1fr; } }
+
+  .jfAgent-window-wrapper, 
+div[class*="jfAgent-window-wrapper"],
+#jfAgent-container,
+.jotform-agent-embed {
+    bottom: auto !important;
+    top: 24px !important;    /* Jarak dari tepi atas layar */
+    right: 24px !important;  /* Jarak dari tepi kanan layar */
+    z-index: 999999 !important;
+}
+
+/* 2. Mengecilkan ukuran tombol bulat bawaan chatbot Jotform */
+.jfAgent-badge, 
+div[class*="jfAgent-badge"],
+button[class*="jfAgent-badge-button"] {
+    width: 48px !important;  /* Bawaan aslinya 60px */
+    height: 48px !important; 
+    transform: scale(0.85) !important; /* Efek skala agar mengecil merata */
+}
+
+/* 3. Menyesuaikan posisi kotak obrolan saat tombolnya diklik */
+.jfAgent-chat-container,
+div[class*="jfAgent-chat-window"] {
+    bottom: auto !important;
+    top: 80px !important;    /* Muncul tepat di bawah tombol kanan atas */
+    right: 24px !important;
+    max-height: 70vh !important; /* Batas tinggi agar tidak amblas ke bawah layar */
+}
 </style>
 </head>
 <body>
@@ -420,11 +448,11 @@ h1, h2, h3, h4, b, .section-title {
   </div>
   <div class="card card-clickable" onclick="showPage('learn')">
     <b>📚 Ruang Belajar</b><br>
-    <span class="small">7 Materi singkat tentang penyelamatan air, lengkap dengan kuis seru dan grafik nilai otomatis.</span>
+    <span class="small">"Membaca bait materi tentang air yang kian menyusut, dilanjutkan kuis seru agar pikiran tak kusut. Di sini semua jawaban bisa diperbaiki, tak seperti rasamu padaku yang sudah telanjur hanyut.."</span>
   </div>
   <div class="card card-clickable" onclick="showPage('ai')">
-    <b>🤖 Aqua Assistant</b><br>
-    <span class="small">AI yang selalu siap kasih jawaban dan kepastian. Bukan seperti dirinya, yang cuma bisa kasih harapan lalu pergi meninggalkan.</span>
+    <b>🤖 EcoBot Assistant</b><br>
+    <span class="small">"AI yang selalu siap kasih jawaban dan kepastian. Bukan seperti dirinya, yang cuma bisa kasih harapan lalu pergi meninggalkan..."</span>
   </div>
 </section>
 
@@ -476,7 +504,7 @@ h1, h2, h3, h4, b, .section-title {
 <section id="ai" class="page">
   <div class="section-header">
     <svg><use href="#icon-bot"/></svg>
-    <h2 class="section-title">Aqua Assistant</h2>
+    <h2 class="section-title">EcoBot Assistant</h2>
   </div>
   <div class="card" style="margin-bottom:24px;">
     <p class="small">Ada yang membingungkan seputar air atau perubahan iklim? Klik aja tombol Chatbot AI di kanan bawah layar. Dekat kok, gak kayak dia yang terasa jauh banget kalau mau dichat.</p>
