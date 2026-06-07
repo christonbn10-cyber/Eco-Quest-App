@@ -42,14 +42,6 @@ h1, h2, h3, h4, b, .section-title {
   overflow: hidden;
   pointer-events: none;
 }
-/* KANVAS GRADASI SOFT AMBIENT */
-.glow-container {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-}
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -658,7 +650,7 @@ const lessons=[
   quizzes:[
     {q:"Apa dampak langsung pemanasan global terhadap siklus air di bumi?", a:["Memperlambat penguapan","Membuat siklus air semakin cepat dan ekstrem","Menghentikan siklus air","Membuat air hujan menjadi beku"], c:1},
     {q:"Mengapa perubahan iklim dapat menyebabkan banjir bandang sekaligus kekeringan panjang?", a:["Karena wilayah kering dipindah ke pegunungan","Karena laju penguapan yang tinggi mengacaukan letak turunnya hujan","Karena awan berhenti bergerak","Karena atmosfer bumi bocor"], c:1},
-    {q:"Bagaimana naiknya permukaan air laut bisa merusak ketersediaan air bersih di daratan?", a:["Air laut yang naik menyusup dan mencemari sumur air tawar menjadi asin","Air laut mengubah arah angin","Air laut membuat ikan air tawar bertambah","Air laut membekukan daratan"], c:0}
+    {q:"Bagaimana naikos permukaan air laut bisa merusak ketersediaan air bersih di daratan?", a:["Air laut yang naik menyusup dan mencemari sumur air tawar menjadi asin","Air laut mengubah arah angin","Air laut membuat ikan air tawar bertambah","Air laut membekukan daratan"], c:0}
   ]
 },
 {
@@ -729,7 +721,6 @@ function updateProgressUI(){
   document.getElementById("fill").style.width = pct + "%";
   renderBadges();
   
-  // Tampilkan visual grafik jika user sudah pernah mengklik kuis
   if (quizCorrect > 0 || quizWrong > 0 || done.length > 0) {
     document.getElementById("chartPlaceholder").style.display = "none";
     document.getElementById("chartsActualGrid").style.display = "grid";
@@ -747,7 +738,7 @@ function renderBadges(){
    "Cycle Master",
    "Rain Harvester",
    "Filter Expert",
-   "Climate Warrior"
+   "Climate Warrior",
    "Eco Saver",
    "Pure Future"
  ];
