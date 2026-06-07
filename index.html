@@ -922,24 +922,38 @@ function finishLesson(){
 }
 
 function initCharts(){
- const qCtx=document.getElementById('quizChart');
- const cCtx=document.getElementById('completionChart');
+ const qCtx = document.getElementById('quizChart');
+ const cCtx = document.getElementById('completionChart');
  if(!qCtx || !cCtx) return;
 
+ // Menghancurkan chart lama sebelum menggambar yang baru agar tidak crash
  if(quizChartInstance) quizChartInstance.destroy();
  if(completionChartInstance) completionChartInstance.destroy();
 
- Chart.defaults.color='#CBD5E1';
- Chart.defaults.font.family='Inter';
+ Chart.defaults.color = '#CBD5E1';
+ Chart.defaults.font.family = 'Inter';
 
+ // LOGIKA PINTAR: Menentukan warna dinamis saat kuis masih kosong
+ let quizData, quizColors, quizLabels;
+ if (quizCorrect === 0 && quizWrong === 0) {
+   quizData = [1];
+   quizColors = ['rgba(255, 255, 255, 0.1)']; // Lingkaran abu-abu netral tanda belum ada kuis
+   quizLabels = ['Belum ada data kuis'];
+ } else {
+   quizData = [quizCorrect, quizWrong];
+   quizColors = ['#34D399', 'rgba(248,113,113,0.35)']; // Hijau untuk benar, merah untuk salah
+   quizLabels = ['Benar', 'Salah'];
+ }
+
+ // Render Grafik Kuis
  quizChartInstance = new Chart(qCtx, {
    type: 'doughnut',
    data: {
-     labels: ['Benar', 'Salah'],
+     labels: quizLabels,
      datasets: [{
-       data: [quizCorrect||1, quizWrong||0],
-       backgroundColor: ['#34D399', 'rgba(248,113,113,0.35)'],
-       borderColor: ['#0b111e', '#0b111e'],
+       data: quizData,
+       backgroundColor: quizColors,
+       borderColor: ['#0b111e'],
        borderWidth: 2
      }]
    },
@@ -951,6 +965,29 @@ function initCharts(){
    }
  });
 
+ // Render Grafik Penyelesaian Materi
+ const completedCount = done.length;
+ const remainingCount = 7 - completedCount;
+
+ completionChartInstance = new Chart(cCtx, {
+   type: 'doughnut',
+   data: {
+     labels: ['Selesai', 'Sisa'],
+     datasets: [{
+       data: [completedCount, remainingCount],
+       backgroundColor: ['#38BDF8', 'rgba(255,255,255,0.06)'],
+       borderColor: ['#0b111e'],
+       borderWidth: 2
+     }]
+   },
+   options: {
+     plugins: { legend: { display: false } },
+     cutout: '72%',
+     responsive: true,
+     maintainAspectRatio: false
+   }
+ });
+}
  const completedCount = done.length;
  const remainingCount = 7 - completedCount;
 
