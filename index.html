@@ -926,27 +926,26 @@ function initCharts(){
  const cCtx = document.getElementById('completionChart');
  if(!qCtx || !cCtx) return;
 
- // Menghancurkan chart lama sebelum menggambar yang baru agar tidak crash
- if(quizChartInstance) quizChartInstance.destroy();
- if(completionChartInstance) completionChartInstance.destroy();
+ // Menggunakan window. agar 100% aman dari error "variable undefined"
+ if(window.quizChartInstance) window.quizChartInstance.destroy();
+ if(window.completionChartInstance) window.completionChartInstance.destroy();
 
  Chart.defaults.color = '#CBD5E1';
  Chart.defaults.font.family = 'Inter';
 
- // LOGIKA PINTAR: Menentukan warna dinamis saat kuis masih kosong
+ // Logika lingkaran abu-abu jika belum ada data kuis sama sekali
  let quizData, quizColors, quizLabels;
  if (quizCorrect === 0 && quizWrong === 0) {
    quizData = [1];
-   quizColors = ['rgba(255, 255, 255, 0.1)']; // Lingkaran abu-abu netral tanda belum ada kuis
+   quizColors = ['rgba(255, 255, 255, 0.1)']; 
    quizLabels = ['Belum ada data kuis'];
  } else {
    quizData = [quizCorrect, quizWrong];
-   quizColors = ['#34D399', 'rgba(248,113,113,0.35)']; // Hijau untuk benar, merah untuk salah
+   quizColors = ['#34D399', 'rgba(248,113,113,0.35)']; 
    quizLabels = ['Benar', 'Salah'];
  }
 
- // Render Grafik Kuis
- quizChartInstance = new Chart(qCtx, {
+ window.quizChartInstance = new Chart(qCtx, {
    type: 'doughnut',
    data: {
      labels: quizLabels,
@@ -965,11 +964,10 @@ function initCharts(){
    }
  });
 
- // Render Grafik Penyelesaian Materi
  const completedCount = done.length;
  const remainingCount = 7 - completedCount;
 
- completionChartInstance = new Chart(cCtx, {
+ window.completionChartInstance = new Chart(cCtx, {
    type: 'doughnut',
    data: {
      labels: ['Selesai', 'Sisa'],
@@ -988,31 +986,39 @@ function initCharts(){
    }
  });
 }
- const completedCount = done.length;
- const remainingCount = 7 - completedCount;
 
- completionChartInstance = new Chart(cCtx, {
-   type: 'doughnut',
-   data: {
-     labels: ['Selesai', 'Sisa'],
-     datasets: [{
-       data: [completedCount, remainingCount],
-       backgroundColor: ['#38BDF8', 'rgba(255,255,255,0.06)'],
-       borderColor: ['#0b111e', '#0b111e'],
-       borderWidth: 2
-     }]
-   },
-   options: {
-     plugins: { legend: { display: false } },
-     cutout: '72%',
-     responsive: true,
-     maintainAspectRatio: false
-   }
- });
+// MEMASTIKAN FUNGSI INI ADA AGAR TIDAK FREEZE/CRASH
+function saveUserData() {
+  localStorage.setItem('ecoquest_xp', xp);
+  localStorage.setItem('ecoquest_correct', quizCorrect);
+  localStorage.setItem('ecoquest_wrong', quizWrong);
+  localStorage.setItem('ecoquest_done', JSON.stringify(done));
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
- showPage('home');
+window.addEventListener('DOMContentLoaded', () => {
+  // Memuat data dari memori browser jika ada
+  if (localStorage.getItem('ecoquest_xp')) {
+    xp = parseInt(localStorage.getItem('ecoquest_xp')) || 0;
+    quizCorrect = parseInt(localStorage.getItem('ecoquest_correct')) || 0;
+    quizWrong = parseInt(localStorage.getItem('ecoquest_wrong')) || 0;
+    done = JSON.parse(localStorage.getItem('ecoquest_done') || '[]');
+    
+    document.getElementById('xp').innerText = xp;
+    document.getElementById('prog').innerText = `${done.length} / 7 materi diselesaikan`;
+    document.getElementById('fill').style.width = `${(done.length / 7) * 100}%`;
+  }
+
+  renderLessons();
+  initCharts(); // Gambar chart abu-abu netral di awal muat halaman
+  
+  // Kode otomatisasi nama tim bawaanmu
+  const cards = document.querySelectorAll('#team .card span');
+  if(cards.length > 2) {
+    cards[2].innerText = '"Merancang dan mengerjakan diorama Water Harvesting"';
+    cards[3].innerText = '"Merancang dan mengerjakan diorama Water Harvesting"';
+    cards[4].innerText = '"Merancang dan mengerjakan diorama Water Harvesting"';
+    cards[5].innerText = '"Merancang dan mengerjakan diorama Water Harvesting"';
+  }
 });
 </script>
 </body>
