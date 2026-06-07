@@ -738,11 +738,15 @@ function showPage(p){
 }
 
 function updateProgressUI(){
- document.getElementById("xp").innerText=xp;
- document.getElementById("prog").innerText=`${done.length} / 7 materi diselesaikan`;
- const pct=Math.min(100, Math.round((done.length/7)*100));
- document.getElementById("fill").style.width=pct+"%";
- renderBadges();
+ document.getElementById("xp").innerText = xp;
+  document.getElementById("prog").innerText = `${done.length} / 7 materi diselesaikan`;
+  const pct = Math.min(100, Math.round((done.length / 7) * 100));
+  document.getElementById("fill").style.width = pct + "%";
+  renderBadges();
+
+  // --- TAMBAHKAN 2 BARIS INI DI SINI ---
+  initCharts();   // Memaksa grafik donat mendeteksi skor baru dan menggambar ulang
+  saveUserData(); // Menyimpan progres terbaru ke dalam memori browser
 }
 
 function renderBadges(){
