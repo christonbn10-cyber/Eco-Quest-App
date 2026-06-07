@@ -459,11 +459,11 @@ div[class*="jfAgent-chat-window"] {
   </div>
   
   <!-- TIMELINE PERJALANAN PROYEK -->
-  <div class="timeline-item"><b>Planning (Rencana)</b>Kumpul kelompok untuk menentukan skala maket, mendata bahan bekas yang bisa dipakai, dan bagi-bagi tugas.</div>
-  <div class="timeline-item"><b>Designing (Desain)</b>Menghitung kemiringan atap maket biar air hujan buatan bisa mengalir lancar ke wadah penampung.</div>
-  <div class="timeline-item"><b>Building (Merakit)</b>Mulai bikin miniatur rumah, memasang selang/pipa kecil, dan memasang saringan air pertama.</div>
-  <div class="timeline-item"><b>Testing (Uji Coba)</b>Mengalirkan air berwarna untuk mengecek apakah ada sambungan lem yang bocor atau kurang kuat.</div>
-  <div class="timeline-item"><b>Final Result (Selesai)</b>Menambah hiasan pohon-pohonan di sekitar maket, merapikan data kelompok, dan menghubungkannya ke aplikasi.</div>
+  <div class="timeline-item"><b>Planning (Rencana)</b>Kumpul kelompok untuk menentukan diorama apa yang mau dibuat, mendata alat dan bahan yang bisa dipakai, dan pembagian tugas.</div>
+  <div class="timeline-item"><b>Designing (Desain)</b>Membuat dan memodifikasi sedikit struktur diorama yang sudah disepakati agar air mengalir lancar ke wadah penampung.</div>
+  <div class="timeline-item"><b>Building (Merakit)</b>Mulai membuat miniatur rumah, memasang selang/pipa kecil, dan memasang saringan air.</div>
+  <div class="timeline-item"><b>Testing (Uji Coba)</b>Mengalirkan air untuk mengecek apakah diorama sudah mencerminkan fungsinya.</div>
+  <div class="timeline-item"><b>Final Result (Selesai)</b>Menambah hiasan di sekitar maket, mendokumentasikan, dan menghubungkannya ke aplikasi.</div>
 
   <!-- DOKUMENTASI ESTETIK -->
   <b style="font-family: 'Plus Jakarta Sans', sans-serif; display: block; margin: 32px 0 16px 4px; font-size: 1.1rem; color: var(--text);">📸 Dokumentasi Proyek</b>
@@ -535,7 +535,7 @@ div[class*="jfAgent-chat-window"] {
     <h2 class="section-title">EcoBot Assistant</h2>
   </div>
   <div class="card" style="margin-bottom:24px;">
-    <p class="small">Ada yang membingungkan seputar air atau perubahan iklim? Klik aja tombol Chatbot AI di kanan bawah layar. Dekat kok, gak kayak dia yang terasa jauh banget kalau mau dichat.</p>
+    <p class="small">"Ada yang membingungkan seputar air atau perubahan iklim? Klik aja tombol Chatbot AI di kanan bawah layar. Dekat kok, gak kayak dia yang terasa jauh banget kalau mau dichat..."</p>
   </div>
   <div style="border-radius:20px; overflow:hidden; border:1px solid var(--border);">
     <script src='https://cdn.jotfor.ms/agent/embedjs/019e903c5b597628b46a371b6a73d18de9fb/embed.js'></script>
@@ -741,11 +741,24 @@ function updateProgressUI(){
 function renderBadges(){
  const container=document.getElementById("badgesContainer");
  container.innerHTML="";
+ 
+ // Array nama lencana bahasa Inggris yang variatif dan estetik
+ const badgeNames = [
+   "Hydro Guardian",     // Untuk Water & Life
+   "Cycle Master",       // Untuk Water Cycle
+   "Climate Warrior",    // Untuk Climate & Water Crisis
+   "Rain Harvester",     // Untuk Rainwater Collection
+   "Filter Expert",      // Untuk Water Filtration
+   "Eco Saver",          // Untuk Water Conservation
+   "Pure Future"         // Untuk Clean Water Future
+ ];
+
  lessons.forEach((l,i)=>{
    const isUnlocked=done.includes(i);
    const div=document.createElement("div");
    div.className=`badge-item ${isUnlocked?'badge-unlocked':'badge-locked'}`;
-   div.innerHTML=`<svg><use href="#icon-award"/></svg><span>${l.t.split(' ')[0]}</span>`;
+   // Mengambil nama dari array badgeNames berdasarkan index urutan materi
+   div.innerHTML=`<svg><use href="#icon-award"/></svg><span>${badgeNames[i]}</span>`;
    container.appendChild(div);
  });
 }
