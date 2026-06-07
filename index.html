@@ -517,10 +517,15 @@ div[class*="jfAgent-chat-window"] {
     <div id="badgesContainer" class="badge-grid"></div>
   </div>
 
-  <div class="card">
+ <div class="card">
     <b style="font-size:1rem; display:block; margin-bottom:4px;">📊 Statistik Nilai</b>
     <span class="small">Lihat perbandingan jawaban kuis yang benar dan seberapa banyak materi yang sudah kamu baca.</span>
-    <div class="charts-grid">
+    
+    <div id="chartPlaceholder" style="margin-top: 16px; padding: 20px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 12px; text-align: center; color: var(--muted); font-size: 0.9rem;">
+      🔒 Kerjakan kuis pada materi di bawah untuk menampilkan statistik pembelajaranmu.
+    </div>
+
+    <div class="charts-grid" id="chartsActualGrid" style="display: none;">
       <div style="height:110px; position:relative;"><canvas id="quizChart"></canvas></div>
       <div style="height:110px; position:relative;"><canvas id="completionChart"></canvas></div>
     </div>
